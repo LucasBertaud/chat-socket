@@ -1,13 +1,12 @@
-const Server = require("socket.io");
 const Message = require("../database/Message");
 
-function Socket(server) {
-    const io = new Server(server, {
+function socketServer(server) {
+    const io = require("socket.io")(server, {
         cors: {
             origin: "http://localhost:3000",
-            methods: ["GET", "POST"]
+            methods: ["GET", "POST"],
         }
-    });
+    })
 
     io.on("connection", (socket)=>{
         console.log(`User Connected: ${socket.id}`);
@@ -32,4 +31,4 @@ function Socket(server) {
     });
 }
 
-module.exports = Socket;
+module.exports = socketServer;

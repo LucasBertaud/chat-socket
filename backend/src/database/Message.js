@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const connectDB = require("./Connection");
 
 const Message = mongoose.model('Message', {
