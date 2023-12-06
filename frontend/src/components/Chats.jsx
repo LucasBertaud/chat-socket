@@ -26,9 +26,14 @@ function Chats({socket, user, room}) {
         socket.on("receive_message", (data) => {
             setListMessage((list)=>[...list, data]);
             console.log(`Client a bien reçu le message ${data.message}`)
-        })
+        });
+        socket.on("connect_room", (data) => {
+            data.map((message)=>{
+                setListMessage((list)=>[...list, {room: message.room, author: message.message.author, message: message.message.content, time: message.message.time}]);
+            });
+        });
     }, []);
-
+    
   return (
     <div>
         <div className="header-chat">Chat Room {room}</div>
