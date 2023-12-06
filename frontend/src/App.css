@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.message#you{
+  background-color: #61dafb;
+}
+.message#notyou{
+  background-color: greenyellow;
+}

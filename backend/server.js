@@ -21,12 +21,17 @@ io.on("connection", (socket)=>{
     socket.on("join_room", (data) => {
         socket.join(data);
         console.log(`User with id : ${socket.id} join room ${data}`)
-    })
+    });
+
+    socket.on("send_message", (data) => {
+        socket.to(data.room).emit("receive_message", data);
+        console.log(`New message emited from room ${data.room} by author ${data.author} at ${data.time}. The content of message is "${data.message}" `);
+    });
 
     socket.on("disconnect", ()=>{
         console.log("User Disconnect: ", socket.id)
     });
-})
+});
 
 // lancer le serveur
 server.listen(3001, ()=>console.log("serveur a démarré"));
