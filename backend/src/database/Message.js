@@ -1,32 +1,39 @@
 const mongoose = require("mongoose");
-const connectDB = require("./Connection");
+const Connection = require("./Connection");
 
 const Message = mongoose.model('Message', {
     room: String,
     message: Object,
 })
 
-async function getAllMessage(data) {
-    connectDB();
-
-    const messages = await Message.find({room: data});
-
-    return messages;
+function getAllMessage(data) {
+    Connection()
+        .then(async () => {
+            const messages = await Message.find({room: data});
+            return messages;
+        })
+        .catch((error)=>{
+            console.log(error)
+        })   
 }
 
-async function dbNewMessage(data) {
-    connectDB();
-
-    const newMessage = new Message({
-        room: data.room,
-        message: {
-            author: data.author,
-            time: data.time,
-            content: data.message
-        }
-    })
-    await newMessage.save();
-    console.log("objet sauvegardé");
+function dbNewMessage(data) {
+    Connection()
+        .then(async ()=>{
+            const newMessage = new Message({
+                room: data.room,
+                message: {
+                    author: data.author,
+                    time: data.time,
+                    content: data.message
+                }
+            })
+            await newMessage.save();
+            console.log("objet sauvegardé");
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
 }
 
 module.exports = {getAllMessage, dbNewMessage};

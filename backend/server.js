@@ -6,8 +6,9 @@ const http = require("http");
 const cors = require("cors");
 const socketServer = require("./src/socket/socketServer");
 
-// create server
+// middleware
 app.use(cors());
+
 const server = http.createServer(app);
 
 socketServer(server);
