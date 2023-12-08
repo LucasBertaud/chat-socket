@@ -21,9 +21,13 @@ function socketServer(server) {
         socket.on("send_message", (data) => {
             socket.to(data.room).emit("receive_message", data);
             console.log(`New message emited from room ${data.room} by author ${data.author} at ${data.time}. The content of message is "${data.message}" `);
-
             Message.dbNewMessage(data).catch(err => console.log(err));
         });
+
+        socket.on("delete_message", (data) => {
+            socket.to(data.room).emit("deleted_message", data)
+            console.log(`Message has been deleted by ${data.message.author}`)
+        })
 
         socket.on("disconnect", ()=>{
             console.log("User Disconnect: ", socket.id)

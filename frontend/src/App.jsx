@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import io from 'socket.io-client';
+import axios from 'axios';
 import Chats from './components/Chats';
 
 const socket = io.connect("http://localhost:3001");
