@@ -25,7 +25,7 @@ function Chats({socket, user, room}) {
 
     const deleteMessage = (element) => {
         const key = element.currentTarget.dataset.key
-        axios.delete(`http://localhost:3001/chat/${key}`)
+        axios.delete(`http://server-chat-socket.lucas-bertaud.mds-lille.yt:3001/chat/${key}`)
             .then(async (res) => {
                 const messageDeleted = res.data.message_delete
                 setListMessage(listMessage.filter(
