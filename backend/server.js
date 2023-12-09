@@ -19,4 +19,4 @@ const server = http.createServer(app)
 socketServer(server)
 
 // start server
-server.listen(3001, ()=>console.log("serveur a démarré"))
+server.listen(10000, ()=>console.log("serveur a démarré"))
