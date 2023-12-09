@@ -12,12 +12,11 @@ const chatRouter = require("./src/router/ChatRouter")
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors({
-    origin: '*',
+    origin: 'http://chat-socket.lucas-bertaud.mds-lille.yt',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-    methods: ['GET','POST','HEAD','PUT','PATCH','DELETE'],
-    allowedHeaders: ['Content-Type'],
-    exposedHeaders: ['Content-Type']
-}))
+    optionsSuccessStatus: 204,
+  }))
 app.use("/chat", chatRouter)
 
 const server = http.createServer(app)
@@ -25,4 +24,4 @@ const server = http.createServer(app)
 socketServer(server)
 
 // start server
-server.listen(10000, ()=>console.log("serveur a démarré"))
+server.listen(443, ()=>console.log("serveur a démarré"))
