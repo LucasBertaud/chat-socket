@@ -3,7 +3,7 @@ const Message = require("../database/Message");
 function socketServer(server) {
     const io = require("socket.io")(server, {
         cors: {
-            origin: "http://chat-socket.lucas-bertaud.mds-lille.yt",
+            origin: "*",
             methods: ["GET", "POST"],
         }
     })

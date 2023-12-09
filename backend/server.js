@@ -15,7 +15,6 @@ app.use(cors({
     origin: 'http://chat-socket.lucas-bertaud.mds-lille.yt',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-    optionsSuccessStatus: 204,
   }))
 app.use("/chat", chatRouter)
 
