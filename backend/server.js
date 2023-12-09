@@ -11,7 +11,9 @@ const chatRouter = require("./src/router/ChatRouter")
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors({
+    origin: 'http://chat-socket.lucas-bertaud.mds-lille.yt/'
+}))
 app.use("/chat", chatRouter)
 
 const server = http.createServer(app)
