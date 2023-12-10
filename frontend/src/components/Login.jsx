@@ -2,16 +2,21 @@ import React, { useState } from 'react'
 import Register from './Register'
 import axios from 'axios'
 
-function Login({user, setUser}) {
+function Login({user, setUser, setUserConnected}) {
     const [toRegister, setToRegister] = useState(false)
     const [password, setPassword] = useState("")
 
     function connection(){
-        axios.post("http://localhost:3001/user", {
+        axios.post("https://server-chat-socket-p1w9.onrender.com/user", {
             user: user,
             password: password
         })
-        .then((res)=>console.log(res))
+        .then((res)=>{
+            if (res.data.pseudo) {
+                setUser(res.data.pseudo)
+                setUserConnected(true)
+            }
+        })
         .catch((error)=>console.error(error))
     }
 

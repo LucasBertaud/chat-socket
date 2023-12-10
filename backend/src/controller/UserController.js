@@ -1,9 +1,10 @@
-const Register = require("../database/User")
+const User = require("../database/User")
 const bcrypt = require("bcrypt")
 
+// put('/', registerUser)
 const registerUser = async (req, res) => {
    const pseudo = req.body.pseudo
-   const occurence = await Register.occurrenceUser(pseudo);
+   const occurence = await User.occurrenceUser(pseudo);
    if (occurence) {
         res.send({error: "Le pseudo est déjà pris"})
    }else{
@@ -11,7 +12,7 @@ const registerUser = async (req, res) => {
         const saltRounds = 10;
         bcrypt.hash(password, saltRounds, function(err, hash) {
           if (!err) {
-               Register.registerUser(pseudo, hash)
+               User.registerUser(pseudo, hash)
                res.send({sauvegarde: "Votre compte utilisateur a été sauvegardée"})
           }else{
                console.error(err)
@@ -20,10 +21,21 @@ const registerUser = async (req, res) => {
    }
 }
 
-const searchUser = async (req, res) => {
+// post('/', logginUser)
+const logginUser = async (req, res) => {
      const pseudo = req.body.user
      const password = req.body.password
-     console.log(req.body)
+     const occurence = await User.occurrenceUser(pseudo);
+     if (occurence) {
+          const comparePass = await bcrypt.compare(password, occurence.password)
+          if (comparePass) {
+               res.send({pseudo: pseudo})
+          }else{
+               res.send({error: "Le mot de passe n'est pas correct"})
+          }
+     }else{
+          res.send({error: "Le pseudo n'existe pas"})
+     }
 }
 
-module.exports = {registerUser, searchUser}
+module.exports = {registerUser, logginUser}

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
 
-const Join = ({showChat, setShowChat, room, setRoom}) => {
+const Join = ({socket, setShowChat, room, setRoom}) => {
 
-    const joinRoom = (socket) => {
+    const joinRoom = () => {
         if (room !== "") {
           socket.emit("join_room", room);
           setShowChat(true);

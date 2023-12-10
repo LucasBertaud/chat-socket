@@ -24,11 +24,7 @@ async function occurrenceUser(pseudo){
     try {
         await Connection()
         const occurence = await Users.findOne({pseudo: pseudo})
-        if (occurence) {
-            return true
-        }else{
-            return false
-        }
+        return occurence
     } catch (error) {
         console.error(error)
         throw error

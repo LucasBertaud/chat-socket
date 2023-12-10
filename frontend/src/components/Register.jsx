@@ -8,13 +8,13 @@ function Register({user, setUser, setToRegister}) {
 
     function registerUser() {
         if (password == passwordRepeat) {
-            axios.put("http://localhost:3001/register", {
+            axios.put("https://server-chat-socket-p1w9.onrender.com/user", {
                 pseudo: user,
                 password: password
             })
             .then((response)=>{
                 if (response.data.sauvegarde) {
-                    
+                    console.log(response.data.sauvegarde)
                 }
             })
             .catch((error)=> console.error(error))

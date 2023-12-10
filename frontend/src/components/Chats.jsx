@@ -25,8 +25,8 @@ function Chats({socket, user, room}) {
 
     const deleteMessage = (element) => {
         const key = element.currentTarget.dataset.key
-        // axios.delete(`https://server-chat-socket-p1w9.onrender.com/chat/${key}`)
-            axios.delete(`http://localhost:3001`)
+        // axios.delete(`http://localhost:3001`)
+        axios.delete(`https://server-chat-socket-p1w9.onrender.com/chat/${key}`)
             .then(async (res) => {
                 const messageDeleted = res.data.message_delete
                 setListMessage(listMessage.filter(
