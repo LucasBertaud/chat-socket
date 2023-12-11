@@ -2,8 +2,10 @@ const mongoose = require("mongoose");
 const Connection = require("./Connection");
 
 const Users = mongoose.model('Users', {
-    pseudo: String,
-    password: String,
+    pseudo: {type: String,  required: true},
+    password: {type: String,  required: true},
+    image: {type: String, required: false},
+    description: {type: String, required: false}
 })
 
 async function registerUser(pseudo, password) {
@@ -31,4 +33,17 @@ async function occurrenceUser(pseudo){
     }
 }
 
-module.exports = {registerUser, occurrenceUser};
+async function updateUser(id, image, description){
+    try {
+        await Connection()
+        const update = await Users.findByIdAndUpdate(id, {
+            image: image, description: description
+        })
+        return update
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+module.exports = {registerUser, occurrenceUser, updateUser};

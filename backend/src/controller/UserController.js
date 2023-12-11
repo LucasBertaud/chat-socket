@@ -1,5 +1,6 @@
 const User = require("../database/User")
 const bcrypt = require("bcrypt")
+const cryptoJS = require("crypto-js")
 
 // put('/', registerUser)
 const registerUser = async (req, res) => {
@@ -29,7 +30,7 @@ const logginUser = async (req, res) => {
      if (occurence) {
           const comparePass = await bcrypt.compare(password, occurence.password)
           if (comparePass) {
-               res.send({pseudo: pseudo})
+               res.send({pseudo: pseudo, user_id: occurence.id})
           }else{
                res.send({error: "Le mot de passe n'est pas correct"})
           }
@@ -38,4 +39,20 @@ const logginUser = async (req, res) => {
      }
 }
 
-module.exports = {registerUser, logginUser}
+// patch('/', updateUser)
+const updateUser = async (req, res) => {
+     const id = req.params.id
+
+     // gérer les images
+     let image = req.body.image
+     console.log(image, id)
+     if(image){
+          image = cryptoJS.SHA256(image).toString;
+     }
+
+     const description = req.body.description
+     const updateUser = await User.updateUser(id, image, description)
+     res.send({update: updateUser})
+}
+
+module.exports = {registerUser, logginUser, updateUser}
