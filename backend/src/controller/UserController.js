@@ -88,7 +88,9 @@ const searchUsers = async(req, res) => {
 const addContact = async (req, res) => {
      const userId = req.body.user.id
      const contactId = req.body.contact._id
-     User.addContact(userId, contactId)
+     if (contactId != undefined) {
+          User.addContact(userId, contactId)
+     }
 }
 
 // get('/getcontact', getContact)

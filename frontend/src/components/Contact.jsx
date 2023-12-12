@@ -27,10 +27,14 @@ function Contact({user, setUser}) {
         .then((res)=>setContactList(res.data.listContact))
         .catch((err)=>console.error(err))
       }
+      return
     }else{
-      if (user.contact != undefined) {
+      if (user.contact != undefined && user.contact.length > 0) {
         axios.put("http://localhost:3001/user/addcontact", {user: user, contact: user.contact[user.contact.length - 1]})
+        .then(()=>{ref.current = false})
+        .catch((err)=>console.error(err))
       }
+      return
     }
   }, [user.contact])
 
