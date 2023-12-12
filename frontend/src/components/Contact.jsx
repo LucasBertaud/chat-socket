@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 
 function Contact({user, setUser}) {
   const [search, setSearch] = useState("")
   const [users, setUsers] = useState([])
-  console.log(user)
+  const [contactList, setContactList] = useState([])
+  const ref = useRef(false)
   
   useEffect(() => {
     if (search != "") {
@@ -19,11 +20,19 @@ function Contact({user, setUser}) {
   }, [search, user])
 
   useEffect(()=>{
-    if (user.contact != undefined) {
-      axios.put("http://localhost:3001/user/addcontact", {user: user, contact: user.contact[user.contact.length - 1]})
+    if (!ref.current) {
+      ref.current = true
+      if (user.contact != undefined) {
+        axios.post("http://localhost:3001/user/getcontact", {user: user})
+        .then((res)=>setContactList(res.data.listContact))
+        .catch((err)=>console.error(err))
+      }
+    }else{
+      if (user.contact != undefined) {
+        axios.put("http://localhost:3001/user/addcontact", {user: user, contact: user.contact[user.contact.length - 1]})
+      }
     }
   }, [user.contact])
-  
 
   return (
     <section className="discussions">
@@ -33,7 +42,7 @@ function Contact({user, setUser}) {
             <input type="text" placeholder="Search..." onChange={(e)=>setSearch(e.target.value)}></input>
         </div>
         </div>
-        {
+        { users.length > 0 ? (
           users.map(e => {
             return(
               <div className="discussion" key={e._id}>
@@ -52,6 +61,22 @@ function Contact({user, setUser}) {
               </div>
             )
           })
+         ) : contactList.length > 0 ? (
+          contactList.map(e => {
+            return(
+              <div className="discussion" key={e._id}>
+                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${e.image})`}}>
+                    {/* <div className="online"></div> */}
+                </div>
+                <div className="desc-contact">
+                    <p className="name">{e.pseudo}</p>
+                    <p className="message">{e.description}</p>
+                </div>
+                <div className="timer">Contact</div>
+              </div>
+            )
+          })
+         ) : ("")
         }
     </section>
   )

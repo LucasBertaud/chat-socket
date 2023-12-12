@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import axios from 'axios';
 
 function Description({user, setUser}) {
-    // Modifier une description
-    console.log(user)
-    useEffect(()=>{
+  const ref = useRef(false);
+
+  // Modifier une description
+  useEffect(()=>{
+    if (!ref.current) {
+      ref.current = true
+    }else{
         const timeoutId = setTimeout(() => {
             axios.patch('http://localhost:3001/user', {description: user.description, id: user.id})
             .catch((error)=>console.error(error))
@@ -13,6 +17,7 @@ function Description({user, setUser}) {
         return () => {
             clearTimeout(timeoutId)
         }
+      }
     }, [user.description])
 
   return (

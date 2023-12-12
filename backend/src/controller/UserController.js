@@ -70,7 +70,7 @@ const infoUser = async(req, res) => {
      const user = await User.findById(id)
 
      if (user) {
-          res.send({img: user.image, description: user.description});
+          res.send({img: user.image, description: user.description, contact: user.contact});
      }else{
           res.send({error: "utilisateur non trouvé"})
      }
@@ -79,9 +79,8 @@ const infoUser = async(req, res) => {
 // post('/searchusers', searchUsers)
 const searchUsers = async(req, res) => {
      const search = req.body.search
-     const id = req.body.user.id
-     const contact = req.body.user.contact
-     const users = await User.searchUsers(search, id, contact)
+     const user = req.body.user
+     const users = await User.searchUsers(search, user)
      res.send({users: users})
 }
 
@@ -90,7 +89,15 @@ const addContact = async (req, res) => {
      const userId = req.body.user.id
      const contactId = req.body.contact._id
      User.addContact(userId, contactId)
-     console.log(contactId, userId)
 }
 
-module.exports = {registerUser, logginUser, updateUser,  infoUser, searchUsers, addContact}
+// get('/getcontact', getContact)
+const getContact = async (req, res) => {
+     const contact = req.body.user.contact
+     const listContact = await User.searchContact(contact)
+     if (listContact) {
+          res.send({listContact: listContact})
+     }
+}
+
+module.exports = {registerUser, logginUser, updateUser,  infoUser, searchUsers, addContact, getContact}

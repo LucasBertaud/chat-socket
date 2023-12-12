@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const cryptoJS = require("crypto-js")
 const path = require('path')
-const {registerUser, logginUser, updateUser, infoUser, searchUsers, addContact} = require("../controller/UserController")
+const {registerUser, logginUser, updateUser, infoUser, searchUsers, addContact, getContact} = require("../controller/UserController")
 const multer = require("multer");
 
 // multer mechanics
@@ -29,5 +29,7 @@ router.post('/info', infoUser)
 router.post('/searchusers', searchUsers)
 
 router.put('/addcontact', addContact)
+
+router.post('/getcontact', getContact)
 
 module.exports = router

@@ -48,7 +48,7 @@ function App() {
     if (userConnected) {
       axios.post("http://localhost:3001/user/info", {id: user.id})
       .then(async (res)=>{
-        setUser(prev => ({...prev, image: res.data.img, description: res.data.description}))
+        setUser(prev => ({...prev, image: res.data.img, description: res.data.description, contact: res.data.contact}))
       })
       .catch((error)=>console.error(error))
     }
