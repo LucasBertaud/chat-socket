@@ -46,4 +46,45 @@ async function updateUser(id, image, description){
     }
 }
 
-module.exports = {registerUser, occurrenceUser, updateUser};
+async function findById(id){
+    try {
+        await Connection()
+        const user = await Users.findById(id)
+        return user
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+async function searchUsers(value, id, contact){
+    try {
+        await Connection()
+        let arrayId = [id]
+        if (contact) {
+            contact.forEach(e => arrayId.push(e._id))
+        }
+        const users = await Users.find({pseudo: new RegExp(value), _id: {$nin : arrayId}}).limit(8)
+        users.forEach(objet => {
+            if (objet.password) {
+                objet.password = undefined
+            }
+        })
+        return users
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+async function addContact(userId, contactId){
+    try {
+        await Connection()
+        const user = await Users.findByIdAndUpdate(userId, {$push : {contact: contactId}})
+        return user
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+module.exports = {registerUser, occurrenceUser, updateUser, findById, searchUsers, addContact};

@@ -7,7 +7,7 @@ const cors = require("cors")
 const socketServer = require("./src/socket/socketServer")
 const bodyParser = require("body-parser")
 const chatRouter = require("./src/router/ChatRouter")
-const registerRouter = require("./src/router/UserRouter")
+const UserRouter = require("./src/router/UserRouter")
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -18,7 +18,8 @@ app.use(cors({
     credentials: true,
 }))
 app.use("/chat", chatRouter)
-app.use("/user", registerRouter)
+app.use("/user", UserRouter)
+app.use(express.static('public'))
 
 const server = http.createServer(app)
 

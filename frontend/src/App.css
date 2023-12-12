@@ -177,6 +177,21 @@ body {
   border-radius: 15px;
 }
 
+.add {
+  margin-left: 15%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  padding: 3px 8px;
+  color: #ffffff;
+  background-color: #6780cc;
+  border: 1px solid #e5e5e500;
+  border-radius: 15px;
+}
+
+.add:hover{
+  opacity: 0.8;
+}
+
 .chat {
   width: calc(65% - 85px);
 }
@@ -550,4 +565,13 @@ body {
   max-width: 100%;
   margin: 2rem auto;
   flex: 0;
+}
+
+.desc textarea::placeholder{
+  color: rgb(197, 194, 194);
+}
+
+.desc textarea{
+  overflow: hidden;
+  resize: none;
 }

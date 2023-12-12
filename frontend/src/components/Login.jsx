@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Register from './Register'
 import axios from 'axios'
 
-function Login({user, setUser, setUserConnected, setUserId}) {
+function Login({user, setUser, setUserConnected}) {
     const [toRegister, setToRegister] = useState(false)
     const [password, setPassword] = useState("")
 
@@ -12,13 +12,12 @@ function Login({user, setUser, setUserConnected, setUserId}) {
         //     password: password
         // })
         axios.post("http://localhost:3001/user", {
-            user: user,
+            user: user.pseudo,
             password: password
         })
         .then((res)=>{
             if (res.data.pseudo) {
-                setUser(res.data.pseudo)
-                setUserId(res.data.user_id)
+                setUser({pseudo: res.data.pseudo, id: res.data.user_id})
                 setUserConnected(true)
             }
         })
@@ -37,7 +36,7 @@ function Login({user, setUser, setUserConnected, setUserId}) {
             <div className="wrapper">
                 <div className="form-signin">       
                     <h2 className="form-signin-heading">Connexion</h2>
-                    <input type="text" className="form-control" name="username" placeholder="Pseudo" required="" autoFocus="" onChange={(e)=>setUser(e.target.value)} />
+                    <input type="text" className="form-control" name="username" placeholder="Pseudo" required="" autoFocus="" onChange={(e)=>setUser({pseudo: e.target.value})} />
                     <input type="password" className="form-control" name="password" placeholder="Mot de passe" required="" onChange={(e)=>setPassword(e.target.value)} />      
                     <label className="checkbox">
                         <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe" /> Se souvenir de moi

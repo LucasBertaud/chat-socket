@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Chats from './components/Chats';
@@ -7,16 +7,14 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Edit from './components/Edit';
+import axios from 'axios';
 
 // const socket = io.connect("https://server-chat-socket-p1w9.onrender.com/");
 const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [showChat, setShowChat] = useState(false);
-  const [user, setUser] = useState("");
-  const [userId, setUserId] = useState("");
-  const [userImage, setUserImage] = useState("");
-  const [userDescription, setUserDescription] = useState("");
+  const [user, setUser] = useState({});
   const [room, setRoom] = useState("");
   const [userConnected, setUserConnected] = useState(false);
   const [selectedComponent, setSelectedComponent] = useState("home");
@@ -27,10 +25,10 @@ function App() {
         return <Home />
         break;
       case 'contact':
-        return <Contact userId={userId}/>
+        return <Contact user={user} setUser={setUser}/>
         break;
       case 'edit':
-        return <Edit user={user} userId={userId} userImage={userImage} setUserImage={setUserImage} userDescription={userDescription} setUserDescription={setUserDescription}/>
+        return <Edit user={user} setUser={setUser}/>
         break;
       case 'chat':
         return <Chats socket={socket} user={user} room={room} />
@@ -44,6 +42,18 @@ function App() {
     setUser("");
     setUserConnected(false)
   }
+
+  // Récupère les infos de l'utilisateur
+  useEffect(() => {
+    if (userConnected) {
+      axios.post("http://localhost:3001/user/info", {id: user.id})
+      .then(async (res)=>{
+        setUser(prev => ({...prev, image: res.data.img, description: res.data.description}))
+      })
+      .catch((error)=>console.error(error))
+    }
+  }, [userConnected])
+  
 
   // return (
   //   <div className="App">
@@ -87,7 +97,7 @@ function App() {
           </ul>
         </nav>
         {!userConnected ? (
-          <Login user={user} setUser={setUser} setUserConnected={setUserConnected} setUserId={setUserId}/>
+          <Login user={user} setUser={setUser} setUserConnected={setUserConnected}/>
         ) : (
           renderComponent()
         )}
