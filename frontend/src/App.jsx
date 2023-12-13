@@ -25,13 +25,13 @@ function App() {
         return <Home />
         break;
       case 'contact':
-        return <Contact user={user} setUser={setUser}/>
+        return <Contact user={user} setUser={setUser} selectedComponent={selectedComponent}/>
         break;
       case 'edit':
         return <Edit user={user} setUser={setUser}/>
         break;
       case 'chat':
-        return <Chats socket={socket} user={user} room={room} />
+        return <Chats socket={socket} user={user} room={room} setRoom={setRoom} selectedComponent={selectedComponent}/>
         break;
       default:
         break;

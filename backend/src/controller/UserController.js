@@ -87,9 +87,12 @@ const searchUsers = async(req, res) => {
 // put('/addcontact', addContact)
 const addContact = async (req, res) => {
      const userId = req.body.user.id
-     const contactId = req.body.contact._id
-     if (contactId != undefined) {
-          User.addContact(userId, contactId)
+     if (req.body.contact) {
+          const contactId = req.body.contact._id
+          await User.addContact(userId, contactId)
+          res.send({contact: contactId})
+     }else{
+          res.send({error: "contact non trouvé"})
      }
 }
 

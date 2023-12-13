@@ -1,4 +1,4 @@
-const Message = require("../database/Message");
+const Room = require("../controller/ChatController");
 
 function socketServer(server) {
     const io = require("socket.io")(server, {
@@ -13,15 +13,15 @@ function socketServer(server) {
         
         socket.on("join_room", async (room) => {
             socket.join(room);
-            const messages = await Message.getAllMessage(room);
-            socket.emit("connect_room", messages);
+            const getRoom = await Room.getRoom(room)
+            socket.emit("connect_room", getRoom);
             console.log(`User with id : ${socket.id} join room ${room}`)
         });
 
-        socket.on("send_message", (data) => {
-            socket.to(data.room).emit("receive_message", data);
-            console.log(`New message emited from room ${data.room} by author ${data.author} at ${data.time}. The content of message is "${data.message}" `);
-            Message.dbNewMessage(data).catch(err => console.log(err));
+        socket.on("send_message", async (message, room) => {
+            socket.to(room).emit("receive_message", message);
+            const updateRoom = await Room.updateRoom(room, message)
+            console.log(`New message emited from room ${room} by author ${message.author} at ${message.date}. The content of message is "${message.content}" `);
         });
 
         socket.on("delete_message", (data) => {

@@ -6,7 +6,6 @@ const Join = ({socket, setShowChat, room, setRoom}) => {
     const joinRoom = () => {
         if (room !== "") {
           socket.emit("join_room", room);
-          setShowChat(true);
         }
     }
 
