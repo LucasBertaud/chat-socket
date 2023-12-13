@@ -23,4 +23,18 @@ const updateRoom = async (room, message) => {
     }
 }
 
-module.exports = {getRoom, updateRoom}
+//  post('/', getLastMessages)
+const getLastMessages = async (req, res) => {
+    const id = req.body.id
+    const chats = await Room.findLastMessages(id)
+
+    if (chats) {
+        let lastMessages = []
+        chats.forEach(el => lastMessages.push(el.messages.slice(-1)))
+        res.send({lastMessages: lastMessages})
+    }else{
+        res.send({error: "error finding chats"})
+    }
+}
+
+module.exports = {getRoom, updateRoom, getLastMessages}

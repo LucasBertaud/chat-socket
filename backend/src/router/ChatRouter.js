@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {getRoom} = require("../controller/ChatController")
+const {getLastMessages} = require("../controller/ChatController")
 
 // routes
-// router.post('/', getRoom)
-// router.delete('/:id', deleteMessage)
+ router.post('/', getLastMessages)
 
 module.exports = router

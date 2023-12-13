@@ -38,19 +38,6 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
         return () => socket.off(("receive_message"))
     }, [])
 
-    // Supprime le timer précédent un message du même auteur
-    function eraseTime(index, isSameAuthorPreviousMessage) {
-        if (isSameAuthorPreviousMessage) {
-            setTimeout(() => {
-                const selectTimer = document.querySelector(`#timer-${index}`)
-                console.log(selectTimer, index)
-                if (selectTimer) {
-                    selectTimer.remove()
-                }
-            }, 10);
-        }
-    }
-
   return (
     <section className="chat">
         <div className="header-chat">
@@ -60,25 +47,29 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
         </div>
         
         <div className="messages-chat">
-            {listMessage.map((message, index) => {
+            {listMessage.map((message, index, array) => {
                 const isSameAuthor = message.author === user.pseudo
                 const date = message.date.split('|')[0]
                 const time = message.date.split('|')[1]
                 const isSameDate = new Date().toLocaleDateString("FR-fr") === date
                 const previousMessage = listMessage[index - 1]
+                const nextMessage = listMessage[index + 1]
 
-                let isSameAuthorPreviousMessage
+                let isPreviousMessageSameAuthor
                 if (previousMessage) {
-                    isSameAuthorPreviousMessage = message.author === previousMessage.author
-                    eraseTime(index-1, isSameAuthorPreviousMessage)
+                    isPreviousMessageSameAuthor = message.author === previousMessage.author
+                }
+                let isNextMessageSameAuthor
+                if (nextMessage) {
+                    isNextMessageSameAuthor = message.author === nextMessage.author
                 }
 
                 return(
                     <div key={message.author + message.date + index}>
                         {/* Vérifier dans la className si le message provient de l'auteur connecté <div className="response"> */}
                         {/* date ici : vérifier dans listMessage si aucun msg ne correspond à la même date et au même auteur "<p className="time"> 14h58</p>" et "text-only" et "response-time" */}
-                        <div className={isSameAuthor || isSameAuthorPreviousMessage ? "message text-only" : "message"}>
-                            {!isSameAuthor && !isSameAuthorPreviousMessage ? (
+                        <div className={isSameAuthor || isPreviousMessageSameAuthor ? "message text-only" : "message"}>
+                            {!isSameAuthor && !isPreviousMessageSameAuthor ? (
                                 <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${selectContact.image})`}}>
                                 </div>
                             ) : null}
@@ -90,9 +81,12 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                                 <p className="text"> {message.content} </p>
                             )}
                         </div>
-                        <p id={`timer-${index}`} className={isSameAuthor ? "time response-time" : "time"}>
-                            {isSameDate ? time : date + " à " + time} 
-                        </p>
+                        {!isNextMessageSameAuthor ? 
+                            <p id={`timer-${index}`} className={isSameAuthor ? "time response-time" : "time"}>
+                                {isSameDate ? time : date + " à " + time} 
+                            </p>
+                            : null
+                        }
                     </div>
                 )
             })}

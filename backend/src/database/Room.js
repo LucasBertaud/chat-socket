@@ -43,4 +43,15 @@ const updateRoom = async (room, message) => {
     }
 }
 
-module.exports = {saveRoom, findRoom, updateRoom}
+const findLastMessages = async (id) => {
+    try {
+        await Connection()
+        const messages = await Room.find({users: new RegExp(id)})
+        return messages
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+module.exports = {saveRoom, findRoom, updateRoom, findLastMessages}
