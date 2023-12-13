@@ -29,13 +29,18 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
             })
         })
         socket.on("connect_room", (data) => {
-            console.log(data)
-            data.messages.map((message)=>{
-                setListMessage((prev)=>[...prev, {content: message.content, date: message.date, author: message.author, author_id: message.author_id, image: message.image}]);
+            let arrayMessages = []
+            data.messages.map((message, index)=>{
+                arrayMessages.push({content: message.content, date: message.date, author: message.author, author_id: message.author_id, image: message.image})
             });
+            setListMessage(arrayMessages);
           });
 
-        return () => socket.off(("receive_message"))
+        return () => {
+            socket.off("receive_message")
+            socket.off("connect_room")
+            socket.off("deleted_message")
+        }
     }, [])
 
   return (

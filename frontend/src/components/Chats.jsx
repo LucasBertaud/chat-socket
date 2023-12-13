@@ -12,9 +12,16 @@ function Chats({socket, user, room, setRoom, selectedComponent}) {
     useEffect(()=>{
       if (room !== "") {
         socket.emit("join_room", room);
-        setListMessage([])
       }
     }, [room])
+
+    useEffect(() => {
+  
+      return () => {
+        setRoom("")
+        setSelectContact("")
+      };
+    },[]);
 
     return(
         <>
@@ -25,9 +32,9 @@ function Chats({socket, user, room, setRoom, selectedComponent}) {
                   <input type="text" placeholder="Search..."></input>
                 </div>
               </div>
-              <GetContact user={user} contactList={contactList} setContactList={setContactList} selectedComponent={selectedComponent} setSelectContact={setSelectContact} setRoom={setRoom}/>
+              <GetContact user={user} contactList={contactList} setContactList={setContactList} selectedComponent={selectedComponent} setSelectContact={setSelectContact} setRoom={setRoom} socket={socket} />
             </section>
-            {selectContact ? <Message user={user} selectContact={selectContact} socket={socket} room={room} listMessage={listMessage} setListMessage={setListMessage} /> : ""}
+            {selectContact ? <Message user={user} selectContact={selectContact} socket={socket} room={room} listMessage={listMessage} setListMessage={setListMessage} /> : null}
           </>
     )
 }

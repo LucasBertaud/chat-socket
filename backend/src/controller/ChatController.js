@@ -30,7 +30,10 @@ const getLastMessages = async (req, res) => {
 
     if (chats) {
         let lastMessages = []
-        chats.forEach(el => lastMessages.push(el.messages.slice(-1)))
+        chats.forEach(el => {
+            const filter = el.messages.filter((e)=>e.author_id != id)
+            lastMessages.push(filter.slice(-1))
+        })
         res.send({lastMessages: lastMessages})
     }else{
         res.send({error: "error finding chats"})
