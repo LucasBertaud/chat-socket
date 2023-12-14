@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import PinMessage from './PinMessage'
+import PinTimer from './PinTimer'
 
 function GetContact({user, contactList, setContactList, selectedComponent, setSelectContact, setRoom, socket}) {
     const [lastMessages, setLastMessages] = useState([])
@@ -27,36 +28,23 @@ function GetContact({user, contactList, setContactList, selectedComponent, setSe
         }
     }
 
-    function showTimer(index){
-        if (selectedComponent == "contact") {
-            return("contact")
-        }
-        if(selectedComponent == "chat" && lastMessages[index] != undefined){
-            if (lastMessages[index].length > 0) {
-                const time = lastMessages[index][0].date.split("|")[1]
-                const date = lastMessages[index][0].date.split("|")[0]
-                const isSameDate = new Date().toLocaleDateString("FR-fr") === date
-                return(<div className="timer">{isSameDate ? time : date}</div>)
-            }
-        }
-    }
-
     return(
         contactList.map((e, index) => {
+            const contactImage = e.image ? e.image : "default-user-icon.jpg"
             return(
             <div className="discussion" 
             key={e._id} 
             onClick={()=>{
                 handleClick(e)
             }}>
-                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${e.image})`}}>
+                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${contactImage})`}}>
                     {/* <div className="online"></div> */}
                 </div>
                 <div className="desc-contact">
                     <p className="name">{e.pseudo}</p>
-                    <PinMessage key={e._id + index} contact={e} index={index} selectedComponent={selectedComponent} lastMessages={lastMessages} socket={socket}/>
+                    <PinMessage key={e._id + index} contact={e} selectedComponent={selectedComponent} lastMessages={lastMessages} socket={socket}/>
                 </div>
-                {showTimer(index)}
+                <PinTimer key={index + e._id} contact={e} selectedComponent={selectedComponent} lastMessages={lastMessages} socket={socket}/>
             </div>
             )
         })

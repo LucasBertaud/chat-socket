@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 function Message({user, selectContact, socket, room, listMessage, setListMessage}) {
     const [currentMessage, setCurrentMessage] = useState("");
-    const [arrayTimer, setArrayTimer] = useState([])
 
     const sendMessage = async () => {
         if (currentMessage !== "") {
@@ -13,7 +12,7 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                 author_id: user.id,
                 image: user.image,
             }
-            await socket.emit("send_message", messageData, room);
+            await socket.emit("send_message", messageData, room, selectContact._id);
             setListMessage((list)=>[...list, messageData]);
         }
     }
@@ -53,7 +52,8 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
         </div>
         
         <div className="messages-chat">
-            {listMessage.map((message, index, array) => {
+            {listMessage.map((message, index) => {
+                const contactImage = selectContact.image ? selectContact.image : "default-user-icon.jpg"
                 const isSameAuthor = message.author === user.pseudo
                 const date = message.date.split('|')[0]
                 const time = message.date.split('|')[1]
@@ -76,7 +76,7 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                         {/* date ici : vérifier dans listMessage si aucun msg ne correspond à la même date et au même auteur "<p className="time"> 14h58</p>" et "text-only" et "response-time" */}
                         <div className={isSameAuthor || isPreviousMessageSameAuthor ? "message text-only" : "message"}>
                             {!isSameAuthor && !isPreviousMessageSameAuthor ? (
-                                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${selectContact.image})`}}>
+                                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${contactImage})`}}>
                                 </div>
                             ) : null}
                             {isSameAuthor ? (

@@ -16,6 +16,9 @@ function Chats({socket, user, room, setRoom, selectedComponent}) {
     }, [room])
 
     useEffect(() => {
+      if (user !== "") {
+        socket.emit("user_self_room", user.id);
+      }
   
       return () => {
         setRoom("")

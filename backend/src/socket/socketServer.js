@@ -18,8 +18,14 @@ function socketServer(server) {
             console.log(`User with id : ${socket.id} join room ${room}`)
         });
 
-        socket.on("send_message", async (message, room) => {
+        socket.on("user_self_room", async (room) => {
+            socket.join(room);
+            console.log(`User with id : ${socket.id} join the user self room ${room}`)
+        });
+
+        socket.on("send_message", async (message, room, contact_id) => {
             socket.to(room).emit("receive_message", message);
+            socket.to(contact_id).emit("message_to_user_self_room", message)
             const updateRoom = await Room.updateRoom(room, message)
             console.log(`New message emited from room ${room} by author ${message.author} at ${message.date}. The content of message is "${message.content}" `);
         });
