@@ -14,6 +14,7 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
             }
             await socket.emit("send_message", messageData, room, selectContact._id);
             setListMessage((list)=>[...list, messageData]);
+            clearInputMessage()
         }
     }
 
@@ -42,6 +43,27 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
             socket.off("deleted_message")
         }
     }, [])
+
+    const clearInputMessage = () => {
+        const input = document.querySelector(".write-message")
+        if (input) {
+            input.value = ""
+            setCurrentMessage("")
+            scrollToBottom()
+        }
+    }
+
+    const scrollToBottom = () => {
+        const chat = document.querySelector('.messages-chat')
+        if (chat) {
+            setTimeout(() => {
+                chat.scroll({
+                    behavior: 'smooth',
+                    top: chat.scrollHeight
+                })
+            }, 100);
+        }
+    }
 
   return (
     <section className="chat">
@@ -100,8 +122,17 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
 
         <div className="footer-chat">
             <i className="icon fa fa-smile-o clickable" style={{fontSize: "25pt"}} aria-hidden="true"></i>
-            <input type="text" className="write-message" placeholder="Type your message here" onChange={(e) => setCurrentMessage(e.target.value)}></input>
-            <i className="icon send fa fa-paper-plane-o clickable" aria-hidden="true" onClick={sendMessage}></i>
+            <input type="text" className="write-message" placeholder="Type your message here"  
+            onKeyUp={(e)=>{
+                if(e.key == "Enter"){
+                    sendMessage()
+                }
+            }} 
+            onChange={(e) => setCurrentMessage(e.target.value)}></input>
+            <i className="icon send fa fa-paper-plane-o clickable" aria-hidden="true" 
+            onClick={()=>{
+                sendMessage()
+            }}></i>
         </div>
   </section>
   )
