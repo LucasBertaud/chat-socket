@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 function Message({user, selectContact, socket, room, listMessage, setListMessage}) {
     const [currentMessage, setCurrentMessage] = useState("");
+    const [arrayTimer, setArrayTimer] = useState([])
 
     const sendMessage = async () => {
         if (currentMessage !== "") {
@@ -38,19 +39,6 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
         return () => socket.off(("receive_message"))
     }, [])
 
-    // Supprime le timer précédent un message du même auteur
-    function eraseTime(index, isSameAuthorPreviousMessage) {
-        if (isSameAuthorPreviousMessage) {
-            setTimeout(() => {
-                const selectTimer = document.querySelector(`#timer-${index}`)
-                console.log(selectTimer, index)
-                if (selectTimer) {
-                    selectTimer.remove()
-                }
-            }, 10);
-        }
-    }
-
   return (
     <section className="chat">
         <div className="header-chat">
@@ -70,7 +58,9 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                 let isSameAuthorPreviousMessage
                 if (previousMessage) {
                     isSameAuthorPreviousMessage = message.author === previousMessage.author
-                    eraseTime(index-1, isSameAuthorPreviousMessage)
+                    if (isSameAuthorPreviousMessage) {
+                        setArrayTimer(prev => [...prev, index - 1])
+                    }
                 }
 
                 return(
@@ -90,9 +80,11 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                                 <p className="text"> {message.content} </p>
                             )}
                         </div>
+                        {arrayTimer.include(index) ? null : 
                         <p id={`timer-${index}`} className={isSameAuthor ? "time response-time" : "time"}>
                             {isSameDate ? time : date + " à " + time} 
                         </p>
+                        }
                     </div>
                 )
             })}
