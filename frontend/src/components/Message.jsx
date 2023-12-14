@@ -30,13 +30,18 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
             })
         })
         socket.on("connect_room", (data) => {
-            console.log(data)
-            data.messages.map((message)=>{
-                setListMessage((prev)=>[...prev, {content: message.content, date: message.date, author: message.author, author_id: message.author_id, image: message.image}]);
+            let arrayMessages = []
+            data.messages.map((message, index)=>{
+                arrayMessages.push({content: message.content, date: message.date, author: message.author, author_id: message.author_id, image: message.image})
             });
+            setListMessage(arrayMessages);
           });
 
-        return () => socket.off(("receive_message"))
+        return () => {
+            socket.off("receive_message")
+            socket.off("connect_room")
+            socket.off("deleted_message")
+        }
     }, [])
 
   return (
@@ -48,27 +53,29 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
         </div>
         
         <div className="messages-chat">
-            {listMessage.map((message, index) => {
+            {listMessage.map((message, index, array) => {
                 const isSameAuthor = message.author === user.pseudo
                 const date = message.date.split('|')[0]
                 const time = message.date.split('|')[1]
                 const isSameDate = new Date().toLocaleDateString("FR-fr") === date
                 const previousMessage = listMessage[index - 1]
+                const nextMessage = listMessage[index + 1]
 
-                let isSameAuthorPreviousMessage
+                let isPreviousMessageSameAuthor
                 if (previousMessage) {
-                    isSameAuthorPreviousMessage = message.author === previousMessage.author
-                    if (isSameAuthorPreviousMessage) {
-                        setArrayTimer(prev => [...prev, index - 1])
-                    }
+                    isPreviousMessageSameAuthor = message.author === previousMessage.author
+                }
+                let isNextMessageSameAuthor
+                if (nextMessage) {
+                    isNextMessageSameAuthor = message.author === nextMessage.author
                 }
 
                 return(
                     <div key={message.author + message.date + index}>
                         {/* Vérifier dans la className si le message provient de l'auteur connecté <div className="response"> */}
                         {/* date ici : vérifier dans listMessage si aucun msg ne correspond à la même date et au même auteur "<p className="time"> 14h58</p>" et "text-only" et "response-time" */}
-                        <div className={isSameAuthor || isSameAuthorPreviousMessage ? "message text-only" : "message"}>
-                            {!isSameAuthor && !isSameAuthorPreviousMessage ? (
+                        <div className={isSameAuthor || isPreviousMessageSameAuthor ? "message text-only" : "message"}>
+                            {!isSameAuthor && !isPreviousMessageSameAuthor ? (
                                 <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${selectContact.image})`}}>
                                 </div>
                             ) : null}
@@ -80,10 +87,11 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                                 <p className="text"> {message.content} </p>
                             )}
                         </div>
-                        {arrayTimer.include(index) ? null : 
-                        <p id={`timer-${index}`} className={isSameAuthor ? "time response-time" : "time"}>
-                            {isSameDate ? time : date + " à " + time} 
-                        </p>
+                        {!isNextMessageSameAuthor ? 
+                            <p id={`timer-${index}`} className={isSameAuthor ? "time response-time" : "time"}>
+                                {isSameDate ? time : date + " à " + time} 
+                            </p>
+                            : null
                         }
                     </div>
                 )
