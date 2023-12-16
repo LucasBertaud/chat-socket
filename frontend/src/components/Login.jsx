@@ -1,17 +1,14 @@
 import React, { useState } from 'react'
 import Register from './Register'
 import axios from 'axios'
+const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Login({user, setUser, setUserConnected}) {
     const [toRegister, setToRegister] = useState(false)
     const [password, setPassword] = useState("")
 
     function connection(){
-        // axios.post("https://server-chat-socket-p1w9.onrender.com/user", {
-        //     user: user,
-        //     password: password
-        // })
-        axios.post("http://localhost:3001/user", {
+        axios.post(`${BASE_URL}/user`, {
             user: user.pseudo,
             password: password
         })

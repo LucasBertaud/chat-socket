@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import GetContact from './GetContact'
+const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Contact({user, setUser, selectedComponent}) {
   const [search, setSearch] = useState("")
@@ -13,7 +14,7 @@ function Contact({user, setUser, selectedComponent}) {
   useEffect(() => {
     if (ref.current) {
       if (search != "") {
-        axios.post("http://localhost:3001/user/searchusers", {search: search, user: user})
+        axios.post(`${BASE_URL}/user/searchusers`, {search: search, user: user})
         .then((res)=>{
           setUsers(res.data.users)
         })
@@ -30,7 +31,7 @@ function Contact({user, setUser, selectedComponent}) {
 
   useEffect(() => {
     if (contact) {
-      axios.put("http://localhost:3001/user/addcontact", {user: user, contact: contact})
+      axios.put(`${BASE_URL}/user/addcontact`, {user: user, contact: contact})
       .then((res)=>{
         setContactList(prev => [...prev, contact])
         setUser(prev => ({...prev, contact: Array.isArray(prev.contact) ? [contact._id, ...prev.contact] : contact._id}))

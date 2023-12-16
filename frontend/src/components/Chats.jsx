@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import axios from 'axios'
 import GetContact from './GetContact';
 import Message from './Message';
+
 
 function Chats({socket, user, room, setRoom, selectedComponent}) {
     const [contactList, setContactList] = useState([])

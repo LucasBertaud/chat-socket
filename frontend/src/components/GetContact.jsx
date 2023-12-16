@@ -2,15 +2,16 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import PinMessage from './PinMessage'
 import PinTimer from './PinTimer'
+const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function GetContact({user, contactList, setContactList, selectedComponent, setSelectContact, setRoom, socket}) {
     const [lastMessages, setLastMessages] = useState([])
 
     useEffect(()=>{
         if (user.contact != undefined) {
-            axios.post("http://localhost:3001/user/getcontact", {user: user})
+            axios.post(`${BASE_URL}/user/getcontact`, {user: user})
             .then((re)=>{
-                axios.post("http://localhost:3001/chat", {id: user.id})
+                axios.post(`${BASE_URL}/chat`, {id: user.id})
                 .then((res) => {
                     setContactList(re.data.listContact)
                     setLastMessages(res.data.lastMessages)

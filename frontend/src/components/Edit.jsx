@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios';
 import Description from './Description';
+const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 
 function Edit({user, setUser}) {
@@ -19,7 +20,7 @@ function Edit({user, setUser}) {
         let formData = new FormData();
         formData.append('image', file)
         formData.append('id', user.id)
-        axios.patch('http://localhost:3001/user', formData, { 
+        axios.patch(`${BASE_URL}/user`, formData, { 
             headers: {'Content-Type': 'multipart/form-data'},
         })
         .then((res) => {
