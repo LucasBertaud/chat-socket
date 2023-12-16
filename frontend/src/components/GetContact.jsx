@@ -38,7 +38,7 @@ function GetContact({user, contactList, setContactList, selectedComponent, setSe
             onClick={()=>{
                 handleClick(e)
             }}>
-                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${contactImage})`}}>
+                <div className="photo" style={{backgroundImage: `url(${BASE_URL}/images/users/${contactImage})`}}>
                     {/* <div className="online"></div> */}
                 </div>
                 <div className="desc-contact">

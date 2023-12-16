@@ -44,7 +44,7 @@ function Edit({user, setUser}) {
         <div className="card card-one">
         <header>
         <div className="avatar" onClick={modalImg}>
-          {user.image != undefined ?(<img src={`http://localhost:3001/images/users/${user.image}`} alt={user} />):("")}
+          {user.image != undefined ?(<img src={`${BASE_URL}/images/users/${user.image}`} alt={user} />):("")}
         </div>
         </header>
 
