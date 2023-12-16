@@ -2,7 +2,6 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2'
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Register({user, setUser, setToRegister}) {
     const [password, setPassword] = useState('');
@@ -10,7 +9,7 @@ function Register({user, setUser, setToRegister}) {
 
     function registerUser() {
         if (password == passwordRepeat) {
-            axios.put(`${BASE_URL}/user`, {
+            axios.put(`${process.env.REACT_APP_SERVER_BASE_URL}/user`, {
                 pseudo: user,
                 password: password
             })

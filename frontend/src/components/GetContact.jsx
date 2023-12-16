@@ -2,16 +2,15 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import PinMessage from './PinMessage'
 import PinTimer from './PinTimer'
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function GetContact({user, contactList, setContactList, selectedComponent, setSelectContact, setRoom, socket}) {
     const [lastMessages, setLastMessages] = useState([])
 
     useEffect(()=>{
         if (user.contact != undefined) {
-            axios.post(`${BASE_URL}/user/getcontact`, {user: user})
+            axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/user/getcontact`, {user: user})
             .then((re)=>{
-                axios.post(`${BASE_URL}/chat`, {id: user.id})
+                axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/chat`, {id: user.id})
                 .then((res) => {
                     setContactList(re.data.listContact)
                     setLastMessages(res.data.lastMessages)
@@ -38,7 +37,7 @@ function GetContact({user, contactList, setContactList, selectedComponent, setSe
             onClick={()=>{
                 handleClick(e)
             }}>
-                <div className="photo" style={{backgroundImage: `url(${BASE_URL}/images/users/${contactImage})`}}>
+                <div className="photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_BASE_URL}/images/users/${contactImage})`}}>
                     {/* <div className="online"></div> */}
                 </div>
                 <div className="desc-contact">

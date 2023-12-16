@@ -8,10 +8,8 @@ import Contact from './components/Contact';
 import Edit from './components/Edit';
 import axios from 'axios';
 
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
-
 // const socket = io.connect("https://server-chat-socket-p1w9.onrender.com/");
-const socket = io.connect(`${BASE_URL}`);
+const socket = io.connect(`${process.env.REACT_APP_SERVER_BASE_URL}`);
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -47,7 +45,7 @@ function App() {
   // Récupère les infos de l'utilisateur
   useEffect(() => {
     if (userConnected) {
-      axios.post(`${BASE_URL}/user/info`, {id: user.id})
+      axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/user/info`, {id: user.id})
       .then(async (res)=>{
         setUser(prev => ({...prev, image: res.data.img, description: res.data.description, contact: res.data.contact}))
       })

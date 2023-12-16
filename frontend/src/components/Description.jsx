@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import axios from 'axios';
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Description({user, setUser}) {
   const ref = useRef(false);
@@ -11,7 +10,7 @@ function Description({user, setUser}) {
       ref.current = true
     }else{
         const timeoutId = setTimeout(() => {
-            axios.patch(`${BASE_URL}/user`, {description: user.description, id: user.id})
+            axios.patch(`${process.env.REACT_APP_SERVER_BASE_URL}/user`, {description: user.description, id: user.id})
             .catch((error)=>console.error(error))
         }, 2000);
     

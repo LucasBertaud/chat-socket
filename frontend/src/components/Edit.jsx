@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios';
 import Description from './Description';
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 
 function Edit({user, setUser}) {
@@ -20,7 +19,7 @@ function Edit({user, setUser}) {
         let formData = new FormData();
         formData.append('image', file)
         formData.append('id', user.id)
-        axios.patch(`${BASE_URL}/user`, formData, { 
+        axios.patch(`${process.env.REACT_APP_SERVER_BASE_URL}/user`, formData, { 
             headers: {'Content-Type': 'multipart/form-data'},
         })
         .then((res) => {
@@ -44,7 +43,7 @@ function Edit({user, setUser}) {
         <div className="card card-one">
         <header>
         <div className="avatar" onClick={modalImg}>
-          {user.image != undefined ?(<img src={`${BASE_URL}/images/users/${user.image}`} alt={user} />):("")}
+          {user.image != undefined ?(<img src={`${process.env.REACT_APP_SERVER_BASE_URL}/images/users/${user.image}`} alt={user} />):("")}
         </div>
         </header>
 

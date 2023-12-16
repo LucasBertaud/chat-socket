@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Message({user, selectContact, socket, room, listMessage, setListMessage}) {
     const [currentMessage, setCurrentMessage] = useState("");
@@ -99,7 +98,7 @@ function Message({user, selectContact, socket, room, listMessage, setListMessage
                         {/* date ici : vérifier dans listMessage si aucun msg ne correspond à la même date et au même auteur "<p className="time"> 14h58</p>" et "text-only" et "response-time" */}
                         <div className={isSameAuthor || isPreviousMessageSameAuthor ? "message text-only" : "message"}>
                             {!isSameAuthor && !isPreviousMessageSameAuthor ? (
-                                <div className="photo" style={{backgroundImage: `url(${BASE_URL}/images/users/${contactImage})`}}>
+                                <div className="photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_BASE_URL}/images/users/${contactImage})`}}>
                                 </div>
                             ) : null}
                             {isSameAuthor ? (

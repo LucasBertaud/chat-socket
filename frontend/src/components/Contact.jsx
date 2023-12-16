@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import GetContact from './GetContact'
-const BASE_URL = "https://server-chat-socket-p1w9.onrender.com"
 
 function Contact({user, setUser, selectedComponent}) {
   const [search, setSearch] = useState("")
@@ -14,7 +13,7 @@ function Contact({user, setUser, selectedComponent}) {
   useEffect(() => {
     if (ref.current) {
       if (search != "") {
-        axios.post(`${BASE_URL}/user/searchusers`, {search: search, user: user})
+        axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/user/searchusers`, {search: search, user: user})
         .then((res)=>{
           setUsers(res.data.users)
         })
@@ -31,7 +30,7 @@ function Contact({user, setUser, selectedComponent}) {
 
   useEffect(() => {
     if (contact) {
-      axios.put(`${BASE_URL}/user/addcontact`, {user: user, contact: contact})
+      axios.put(`${process.env.REACT_APP_SERVER_BASE_URL}/user/addcontact`, {user: user, contact: contact})
       .then((res)=>{
         setContactList(prev => [...prev, contact])
         setUser(prev => ({...prev, contact: Array.isArray(prev.contact) ? [contact._id, ...prev.contact] : contact._id}))
@@ -52,7 +51,7 @@ function Contact({user, setUser, selectedComponent}) {
           users.map(e => {
             return(
               <div className="discussion" key={e._id}>
-                <div className="photo" style={{backgroundImage: `url(${BASE_URL}/images/users/${e.image})`}}>
+                <div className="photo" style={{backgroundImage: `url(${process.env.REACT_APP_SERVER_BASE_URL}/images/users/${e.image})`}}>
                     {/* <div className="online"></div> */}
                 </div>
                 <div className="desc-contact">
