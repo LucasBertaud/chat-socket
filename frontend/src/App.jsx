@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Chats from './components/Chats';
-import Join from './components/Join';
 import Login from './components/Login';
 import Home from './components/Home';
 import Contact from './components/Contact';
@@ -54,18 +53,6 @@ function App() {
     }
   }, [userConnected])
   
-
-  // return (
-  //   <div className="App">
-  //       {!userConnected ? (
-  //         <Login user={user} setUser={setUser} setUserConnected={setUserConnected}/>
-  //       ) : !showChat ? (
-  //         <Join socket={socket} setShowChat={setShowChat} room={room} setRoom={setRoom}/>
-  //       ) : (
-  //         <Chats socket={socket} user={user} room={room} />
-  //       )}
-  //   </div>
-  // );
   return(
     <div className="container">
       <div className="row">
