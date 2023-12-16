@@ -52,7 +52,7 @@ function Contact({user, setUser, selectedComponent}) {
           users.map(e => {
             return(
               <div className="discussion" key={e._id}>
-                <div className="photo" style={{backgroundImage: `url(http://localhost:3001/images/users/${e.image})`}}>
+                <div className="photo" style={{backgroundImage: `url(${BASE_URL}/images/users/${e.image})`}}>
                     {/* <div className="online"></div> */}
                 </div>
                 <div className="desc-contact">
